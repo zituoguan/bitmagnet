@@ -1,6 +1,6 @@
 ---
-title: Reprocess & Reclassify
-description: Reprocess and reclassify torrents in bitmagnet
+title: 重新处理与重新分类
+description: 在 bitmagnet 中重新处理和重新分类种子
 parent: Guides
 layout: default
 nav_order: 5
@@ -8,38 +8,38 @@ redirect_from:
   - /tutorials/reprocess-reclassify.html
 ---
 
-# Reprocess & Reclassify Torrents
+# 重新处理与重新分类种子
 
-The classifier is being updated regularly, and to reclassify already-crawled torrents you'll need to "reprocess" them.
+分类器会定期更新，如果你想重新分类已抓取的种子，需要对它们进行“重新处理”。
 
-For context: after torrents are crawled or imported, they won't show up in the UI straight away. They must first be "processed" by the job queue. This involves a few steps:
+背景说明：种子被抓取或导入后，并不会立即显示在 UI 中。它们首先需要由作业队列“处理”。这包括以下几个步骤：
 
-- The classifier attempts to classify the torrent (determine its content type, and match it to a known piece of content)
-- The search index for the torrent is built
-- (In future there's likely to be other steps here, such as running rule-based actions)
-- The torrent content record is saved to the database
+- 分类器尝试对种子进行分类（确定其内容类型，并与已知内容进行匹配）
+- 构建种子的搜索索引
+- （未来可能会有其他步骤，比如运行基于规则的操作）
+- 将种子内容记录保存到数据库
 
-## Reprocess individual torrents
+## 重新处理单个种子
 
-Individual torrents can be reprocessed from the "Classification" tab of the torrent detail view.
+可以在种子详情页的“分类”标签下重新处理单个种子。
 
-The following options are available:
+可用的选项包括：
 
-- **Match content by local search:** Enables a local search query on the content table for matching torrents to known content. This should be tried before any external API call is attempted, but it's an expensive query and so it's useful to be able to disable it using this flag.
-- **Match content by external API search:** Enable API calls during classification. This makes the classifier run a _lot_ slower, but enables identification with external services such as TMDB. Metadata already gathered from external APIs is not lost, hence this option is disabled by default.
-- **Force rematch of already matched content:** Ignores any pre-existing match and always classifies from scratch (A torrent is "matched" if it's associated with a specific piece of content from one of the API integrations, currently only TMDB)
+- **通过本地搜索匹配内容：** 启用对内容表的本地搜索查询，用于将种子与已知内容进行匹配。应在尝试任何外部 API 调用前先尝试此操作，但该查询较为耗时，因此可以通过此选项禁用。
+- **通过外部 API 搜索匹配内容：** 启用分类时的 API 调用。这样会使分类器运行变慢，但可以通过外部服务（如 TMDB）进行识别。已从外部 API 获取的元数据不会丢失，因此该选项默认关闭。
+- **强制重新匹配已匹配内容：** 忽略任何已有的匹配，总是从头开始分类（如果种子已与某个 API 集成的具体内容关联，目前仅支持 TMDB，则视为“已匹配”）
 
-## Enqueue torrent processing batch
+## 批量加入种子处理队列
 
-From within the admin dashboard of the web UI, the "Enqueue torrent processing batch" dialog allows you to re-queue torrents and apply the latest classifier updates to their content records.
+在 Web UI 的管理后台中，“批量加入种子处理队列”对话框允许你重新排队种子，并将最新的分类器更新应用到它们的内容记录上。
 
-![Enqueue torrent processing batch](/assets/images/webui-reprocess.png)
+![批量加入种子处理队列](/assets/images/webui-reprocess.png)
 
-The following options are available:
+可用的选项包括：
 
-- **Purge queue jobs:** This will remove any existing jobs from the queue, and is recommended when queueing a full reprocess.
-- **Match content by local search:** Enables a local search query on the content table for matching torrents to known content. This should be tried before any external API call is attempted, but it's an expensive query and so it's useful to be able to disable it using this flag.
-- **Match content by external API search:** Enable API calls during classification. This makes the classifier run a _lot_ slower, but enables identification with external services such as TMDB. Metadata already gathered from external APIs is not lost, hence this option is disabled by default.
-- **Force rematch of already matched content:** Ignores any pre-existing match and always classifies from scratch (A torrent is "matched" if it's associated with a specific piece of content from one of the API integrations, currently only TMDB)
-- **Process orphaned torrents only:** Only reprocess torrents that have no content record.
-- **Content types:** Only reprocess torrents that are currently under the specified content types.
+- **清除队列作业：** 这会移除队列中的所有现有作业，建议在进行全量重新处理时使用。
+- **通过本地搜索匹配内容：** 启用对内容表的本地搜索查询，用于将种子与已知内容进行匹配。应在尝试任何外部 API 调用前先尝试此操作，但该查询较为耗时，因此可以通过此选项禁用。
+- **通过外部 API 搜索匹配内容：** 启用分类时的 API 调用。这样会使分类器运行变慢，但可以通过外部服务（如 TMDB）进行识别。已从外部 API 获取的元数据不会丢失，因此该选项默认关闭。
+- **强制重新匹配已匹配内容：** 忽略任何已有的匹配，总是从头开始分类（如果种子已与某个 API 集成的具体内容关联，目前仅支持 TMDB，则视为“已匹配”）
+- **仅处理孤立种子：** 只重新处理没有内容记录的种子。
+- **内容类型：** 只重新处理当前属于指定内容类型的种子。

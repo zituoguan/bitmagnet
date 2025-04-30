@@ -1,16 +1,16 @@
 ---
-title: External Resources
-description: Community-developed resources, tools and packages for bitmagnet
+title: 外部资源
+description: 由社区开发的 bitmagnet 相关资源、工具和软件包
 layout: default
 nav_order: 7
 ---
 
-# External Resources
+# 外部资源
 
-Community members have developed the following resources, tools and packages; these are not maintained under the **bitmagnet** project:
+社区成员开发了以下资源、工具和软件包；这些内容并非由 **bitmagnet** 项目官方维护：
 
-- [@davispuh](https://github.com/davispuh) has published an Arch package, `bitmagnet-git`, [in the AUR repository](https://aur.archlinux.org/packages/bitmagnet-git).
-- [@DrFrankensteinUK](https://github.com/DrFrankensteinUK) has written [a **bitmagnet** on Synology NAS guide](https://drfrankenstein.co.uk/bitmagnet-in-container-manager-on-a-synology-nas/).
-- [@DyonR](https://github.com/DyonR) has developed [magnetico2bitmagnet](https://github.com/DyonR/magnetico2bitmagnet), a collection of scripts for importing into **bitmagnet** from Magnetico and other sources.
-- [@DyonR](https://github.com/DyonR) has written [a **bitmagnet** on Unraid guide](https://github.com/DyonR/bitmagnet-unraid).
-- Your link could be here!
+- [@davispuh](https://github.com/davispuh) 在 [AUR 仓库](https://aur.archlinux.org/packages/bitmagnet-git) 发布了 Arch 软件包 `bitmagnet-git`。
+- [@DrFrankensteinUK](https://github.com/DrFrankensteinUK) 撰写了 [在 Synology NAS 上运行 **bitmagnet** 的指南](https://drfrankenstein.co.uk/bitmagnet-in-container-manager-on-a-synology-nas/)。
+- [@DyonR](https://github.com/DyonR) 开发了 [magnetico2bitmagnet](https://github.com/DyonR/magnetico2bitmagnet)，这是一个用于从 Magnetico 及其他来源导入到 **bitmagnet** 的脚本集合。
+- [@DyonR](https://github.com/DyonR) 撰写了 [在 Unraid 上运行 **bitmagnet** 的指南](https://github.com/DyonR/bitmagnet-unraid)。
+- 你的链接也可以出现在这里！

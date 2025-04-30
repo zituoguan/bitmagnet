@@ -1,6 +1,6 @@
 ---
-title: Classifier
-description: Understanding and customizing bitmagnet's classifier
+title: 分类器
+description: 了解和自定义 bitmagnet 的分类器
 parent: Guides
 layout: default
 nav_order: 4
@@ -8,85 +8,85 @@ redirect_from:
   - /tutorials/classifier.html
 ---
 
-# Classifier
+# 分类器
 
 {: .note-title }
 
-> tl;dr:
+> 简要说明：
 >
-> The classifier can be configured and customized to do things like:
+> 分类器可以配置和自定义，实现如下功能：
 >
-> - automatically delete torrents you don't want in your index
-> - add custom tags to torrents you're interested in
-> - customize the keywords and file extensions used for determining a torrent's content type
-> - specify completely custom logic to classify and perform other actions on torrents
+> - 自动删除你不想收录的种子
+> - 为你感兴趣的种子添加自定义标签
+> - 自定义用于判断种子内容类型的关键词和文件扩展名
+> - 指定完全自定义的逻辑，对种子进行分类和其他操作
 >
-> Skip to [practical use cases and examples](#practical-use-cases-and-examples)
+> 跳转到[实际用例与示例](#实际用例与示例)
 
-## Background
+## 背景
 
-After a torrent is crawled or imported, some further processing must be done to gather metadata, have a guess at the torrent's contents and finally index it in the database, allowing it to be searched and displayed in the UI/API.
+在种子被爬取或导入后，需要进一步处理以收集元数据、猜测种子内容，最终将其索引到数据库中，便于在 UI/API 中搜索和展示。
 
-**bitmagnet**'s classifier is powered by a [Domain Specific Language](https://en.wikipedia.org/wiki/Domain-specific_language). The aim of this is to provide a high level of customisability, along with transparency into the classification process which will hopefully aid collaboration on improvements to the core classifier logic.
+**bitmagnet** 的分类器基于[领域特定语言（DSL）](https://en.wikipedia.org/wiki/Domain-specific_language)实现，旨在提供高度可定制性和分类过程的透明性，便于协作改进核心分类逻辑。
 
-The classifier is declared in YAML format. The application includes a [core classifier](https://github.com/bitmagnet-io/bitmagnet/blob/main/internal/classifier/classifier.core.yml) that can be configured, extended or completely replaced with a custom classifier. This page documents the required format.
+分类器以 YAML 格式声明。应用内置了一个[核心分类器](https://github.com/bitmagnet-io/bitmagnet/blob/main/internal/classifier/classifier.core.yml)，你可以对其进行配置、扩展或完全替换为自定义分类器。本文档说明了所需格式。
 
-## Source precedence
+## 源优先级
 
-**bitmagnet** will attempt to load classifier source code from all the following locations. Any discovered classifier source will be merged with other sources in the following order of precedence:
+**bitmagnet** 会尝试从以下所有位置加载分类器源码。发现的分类器源码会按如下优先级合并：
 
-- [the core classifier](https://github.com/bitmagnet-io/bitmagnet/blob/main/internal/classifier/classifier.core.yml)
-- `classifier.yml` in the [XDG-compliant](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html) config location for the current user (for example on MacOS this is `~/Library/Application Support/bitmagnet/classifier.yml`)
-- `classifier.yml` in the current working directory
-- [Classifier configuration](#configuration)
+- [核心分类器](https://github.com/bitmagnet-io/bitmagnet/blob/main/internal/classifier/classifier.core.yml)
+- 当前用户的 [XDG 兼容](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html) 配置目录下的 `classifier.yml`（如 MacOS 下为 `~/Library/Application Support/bitmagnet/classifier.yml`）
+- 当前工作目录下的 `classifier.yml`
+- [分类器配置](#配置)
 
-Note that multiple sources will be merged, not replaced. For example, keywords added to the classifier configuration will be merged with the core keywords.
+注意，多个来源会合并而不是替换。例如，配置中添加的关键词会与核心关键词合并。
 
-The merged classifier source can be viewed with the CLI command `bitmagnet classifier show`.
+合并后的分类器源码可通过 CLI 命令 `bitmagnet classifier show` 查看。
 
 {% include callout_cli.md %}
 
-## Schema
+## 模式（Schema）
 
-A [JSON schema for the classifier](https://bitmagnet.io/schemas/classifier-0.1.json) is available; some editors and IDEs will be able to validate the structure of your classifier document by specifying the `$schema` attribute:
+提供了[分类器的 JSON schema](https://bitmagnet.io/schemas/classifier-0.1.json)；部分编辑器和 IDE 可通过指定 `$schema` 属性校验你的分类器文档结构：
 
 ```yaml
 $schema: https://bitmagnet.io/schemas/classifier-0.1.json
 ```
 
-The classifier schema can also be viewed by running the cli command `bitmagnet classifier schema`.
+也可通过 CLI 命令 `bitmagnet classifier schema` 查看分类器 schema。
 
 {% include callout_cli.md %}
 
-The classifier declaration comprises the following components:
+分类器声明包含以下组件：
 
-## Workflows
+## 工作流（Workflows）
 
-A workflow is a list of [actions](#actions) that will be executed on all torrents when they are classified. When no custom configuration is provided, the `default` workflow will be run. To use a different workflow instead, specify the `classifier.workflow` configuration option with the name of your custom workflow.
+工作流是将在所有种子分类时执行的[动作](#动作)列表。当未提供自定义配置时，将运行 `default` 工作流。若要使用其他工作流，请通过 `classifier.workflow` 配置项指定自定义工作流名称。
 
-## Actions
+## 动作（Actions）
 
-An action is a piece of [workflow](#workflows) to be executed. All actions either return an updated classification result or an error.
+动作是要执行的[工作流](#工作流)片段。所有动作要么返回更新后的分类结果，要么返回错误。
 
-For example, the following action will set the content type of the current torrent to `audiobook`:
+例如，以下动作会将当前种子的内容类型设为 `audiobook`：
 
 ```yaml
 set_content_type: audiobook
 ```
 
-The following action will return an `unmatched` error:
+以下动作会返回 `unmatched` 错误：
 
 ```yaml
 unmatched
 ```
 
-And the following action will delete the current torrent being classified (returning a `delete` error):
+以下动作会删除当前正在分类的种子（返回 `delete` 错误）：
 
 ```yaml
 delete
 ```
 
-These actions aren't much use on their own - we'd want to check some conditions are satisfied before setting a content type or deleting a torrent, and for this we'd use the `if_else` action. For example, the following action will set the content type to `audiobook` if the torrent name contains audiobook-related keywords, and will otherwise return an `unmatched` error:
+这些动作单独用处不大——通常需要在满足某些条件时才设置内容类型或删除种子，这时可用 `if_else` 动作。例如，以下动作会在种子名称包含有声书相关关键词时将内容类型设为 `audiobook`，否则返回 `unmatched` 错误：
 
 ```yaml
 if_else:
@@ -96,7 +96,7 @@ if_else:
   else_action: unmatched
 ```
 
-The following action will delete a torrent if its name matches the list of`banned` keywords:
+以下动作会在种子名称匹配 `banned` 关键词列表时删除该种子：
 
 ```yaml
 if_else:
@@ -104,27 +104,27 @@ if_else:
   if_action: delete
 ```
 
-Actions may return the following types of error:
+动作可能返回以下错误类型：
 
-- An `unmatched` error indicates that the current action did not match for the current torrent
-- A `delete` error indicates that the torrent should be deleted
-- An unhandled error may occur, for example if the TMDB API was unreachable
+- `unmatched`：当前动作未匹配当前种子
+- `delete`：应删除该种子
+- 未处理的错误，如 TMDB API 无法访问
 
-Whenever an error is returned, the current classification will be terminated.
+一旦返回错误，当前分类流程将终止。
 
-Note that a workflow should never return an `unmatched` error. We expect to iterate through a series of checks corresponding to each content type. If the current torrent does not match the content type being checked, we'll proceed to the next check until we find a match; if no match can be found, the content type will be `unknown`. To facilitate this, we can use the `find_match` action.
+注意，工作流不应返回 `unmatched` 错误。通常会依次检查每种内容类型，若当前种子不匹配则继续下一个，直到找到匹配项；若都不匹配，则内容类型为 `unknown`。为此可用 `find_match` 动作。
 
-The `find_match` action is a bit like a try/catch block in some programming languages; it will try to match a particular content type, and if an `unmatched` error is returned, it will catch the `unmatched` error proceed to the next check. For example, the following action will attempt to classify a torrent as an `audiobook`, and then as an `ebook`. If both checks fail, the content type will be `unknown`:
+`find_match` 类似某些编程语言的 try/catch 块：尝试匹配某内容类型，若返回 `unmatched` 错误，则捕获并继续下一个。例如，以下动作会尝试将种子分类为 `audiobook`，再尝试 `ebook`，若都失败则内容类型为 `unknown`：
 
 ```yaml
 find_match:
-  # match audiobooks:
+  # 匹配有声书：
   - if_else:
       condition: "torrent.baseName.matches(keywords.audiobook)"
       if_action:
         set_content_type: audiobook
       else_action: unmatched
-  # match ebooks:
+  # 匹配电子书：
   - if_else:
       condition: "torrent.files.map(f, f.extension in extensions.ebook ? f.size : - f.size).sum() > 0"
       if_action:
@@ -132,32 +132,32 @@ find_match:
       else_action: unmatched
 ```
 
-For a full list of available actions, please refer to [the JSON schema](https://bitmagnet.io/schemas/classifier-0.1.json).
+完整动作列表请参见[JSON schema](https://bitmagnet.io/schemas/classifier-0.1.json)。
 
-## Conditions
+## 条件（Conditions）
 
-Conditions are used in conjunction with the `if_else` [action](#actions), in order to execute an action if a particular condition is satisfied.
+条件与 `if_else` [动作](#动作)配合使用，用于在满足特定条件时执行动作。
 
-The conditions in the examples above use [CEL (Common Expression Language) expressions](https://cel.dev/).
+上述示例中的条件使用 [CEL（通用表达式语言）](https://cel.dev/) 表达式。
 
-### The CEL environment
+### CEL 环境
 
-CEL is already a [well-documented](https://github.com/google/cel-spec/blob/master/doc/intro.md) language, so this page won't go into detail about the CEL syntax. In the context of the **bitmagnet** classifier, the CEL environment exposes a number of variables:
+CEL 是[文档完善](https://github.com/google/cel-spec/blob/master/doc/intro.md)的语言，这里不详述语法。在 **bitmagnet** 分类器中，CEL 环境暴露了如下变量：
 
-- `torrent`: The current torrent being classified (protobuf type: `bitmagnet.Torrent`)
-- `result`: The current classification result (protobuf type: `bitmagnet.Classification`)
-- `keywords`: A map of strings to regular expressions, representing named lists of [keywords](#keywords)
-- `extensions`: A map of strings to string lists, representing named lists of [extensions](#extensions)
-- `contentType`: A map of strings to enum values representing content types (e.g. `contentType.movie`, `contentType.music`)
-- `fileType`: A map of strings to enum values representing file types (e.g. `fileType.video`, `fileType.audio`)
-- `flags`: A map of strings to the configured values of [flags](#flags)
-- `kb`, `mb`, `gb`: Variables defined for convenience, equal to the number of bytes in a kilobyte, megabyte and gigabyte respectively
+- `torrent`：当前正在分类的种子（protobuf 类型：`bitmagnet.Torrent`）
+- `result`：当前分类结果（protobuf 类型：`bitmagnet.Classification`）
+- `keywords`：字符串到正则表达式的映射，表示命名的[关键词](#关键词)列表
+- `extensions`：字符串到字符串列表的映射，表示命名的[扩展名](#扩展名)列表
+- `contentType`：字符串到枚举值的映射，表示内容类型（如 `contentType.movie`、`contentType.music`）
+- `fileType`：字符串到枚举值的映射，表示文件类型（如 `fileType.video`、`fileType.audio`）
+- `flags`：字符串到[标志](#标志)配置值的映射
+- `kb`、`mb`、`gb`：便捷变量，分别为 1KB、1MB、1GB 的字节数
 
-For more details on the protocol buffer types, please refer to [the protobuf schema](https://github.com/bitmagnet-io/bitmagnet/blob/main/internal/protobuf/bitmagnet.proto).
+更多协议缓冲类型详情见[protobuf schema](https://github.com/bitmagnet-io/bitmagnet/blob/main/internal/protobuf/bitmagnet.proto)。
 
-### Boolean logic (`or`, `and` & `not`)
+### 布尔逻辑（`or`、`and`、`not`）
 
-In addition to CEL expressions, conditions may be declared using the boolean logic operators `or`, `and` and `not`. For example, the following condition evaluates to true, if either the torrent consists mostly of file extensions very commonly used for music (e.g. `flac`), OR if the torrent both has a name that includes music-related keywords, and consists mostly of audio files:
+除 CEL 表达式外，条件还可用布尔逻辑运算符 `or`、`and`、`not` 声明。例如，以下条件为真时，表示种子主要由常见音乐扩展名（如 `flac`）文件组成，或名称包含音乐相关关键词且主要为音频文件：
 
 ```yaml
 or:
@@ -167,47 +167,47 @@ or:
       - "torrent.files.map(f, f.fileType == fileType.audio ? f.size : - f.size).sum() > 0"
 ```
 
-Note that we could also have specified the above condition using just one CEL expression, but breaking up complex conditions like this is more readable.
+当然，也可以用单个 CEL 表达式实现，但拆分复杂条件更易读。
 
-## Keywords
+## 关键词（Keywords）
 
-The classifier includes lists of keywords associated with different types of torrents. These aim to provide a simpler alternative to regular expressions, and the classifier will compile all keyword lists to regular expressions that can be used within CEL expressions. In order for a keyword to match, it must appear as an isolated token in the test string - that is, it must be either at the beginning or preceded by a non-word character, and either at the end or followed by a non-word character.
+分类器包含与不同类型种子相关的关键词列表，旨在提供比正则表达式更简单的替代方案。分类器会将所有关键词列表编译为可在 CEL 表达式中使用的正则表达式。关键词需作为独立词出现才能匹配，即要么在字符串开头或前有非单词字符，要么在结尾或后有非单词字符。
 
-Reserved characters in the syntax are:
+语法保留字符：
 
-- parentheses `(` and `)` enclose a group
-- `|` is an OR operator
-- `*` is a wildcard operator
-- `?` makes the previous character or group optional
-- `+` specifies one or more of the previous character
-- `#` specifies any number
-- ` ` specifies any non-word or non-number character
+- 括号 `(` 和 `)` 表示分组
+- `|` 为或运算符
+- `*` 为通配符
+- `?` 表示前一字符或分组可选
+- `+` 表示前一字符出现一次或多次
+- `#` 表示任意数字
+- 空格 ` ` 表示任意非单词或非数字字符
 
-For example, to define some music- and audiobook-related keywords:
+例如，定义音乐和有声书相关关键词：
 
 ```yaml
 keywords:
-  music: # define music-related keywords
-    - music # all letters are case-insensitive, and must be defined in lowercase unless escaped
+  music: # 音乐相关关键词
+    - music # 字母不区分大小写，需小写或转义
     - discography
     - album
-    - \V.?\A # escaped letters are case-sensitive; matches "VA", "V.A" and "V.A.", but not "va"
-    - various artists # matches "various artists" and "Various.Artists"
-  audiobook: # define audiobook-related keywords
+    - \V.?\A # 转义字母区分大小写，匹配 "VA"、"V.A"、"V.A."，不匹配 "va"
+    - various artists # 匹配 "various artists" 和 "Various.Artists"
+  audiobook: # 有声书相关关键词
     - (audio)?books?
     - (un)?abridged
     - narrated
     - novels?
-    - (auto)?biograph(y|ies) # matches "biography", "autobiographies" etc.
+    - (auto)?biograph(y|ies) # 匹配 "biography"、"autobiographies" 等
 ```
 
 {: .note }
 
-> If you'd rather use plain old regular expressions, the CEL syntax supports that too, for example `torrent.baseName.matches("^myregex$")`.
+> 如需使用普通正则表达式，CEL 语法同样支持，例如 `torrent.baseName.matches("^myregex$")`。
 
-## Extensions
+## 扩展名（Extensions）
 
-The classifier includes lists of file extensions associated with different types of content. For example, to identify torrents of type `comic` by their file extensions, the extensions are first declared:
+分类器包含与不同内容类型相关的文件扩展名列表。例如，要通过扩展名识别 `comic` 类型种子，先声明扩展名：
 
 ```yaml
 extensions:
@@ -219,7 +219,7 @@ extensions:
     - cbz
 ```
 
-The extensions can now be used as part of a condition within an `if_else` action:
+然后可在 `if_else` 动作的条件中使用：
 
 ```yaml
 if_else:
@@ -229,9 +229,9 @@ if_else:
   else_action: unmatched
 ```
 
-## Flags
+## 标志（Flags）
 
-Flags can be used to configure workflows. In order to use a flag in a workflow, it must first be defined. For example, the core classifier defines the following flags that are used in the `default` workflow:
+标志可用于配置工作流。要在工作流中使用标志，需先定义。例如，核心分类器定义了如下标志用于 `default` 工作流：
 
 ```yaml
 flag_definitions:
@@ -240,7 +240,7 @@ flag_definitions:
   delete_xxx: bool
 ```
 
-These flags can be referenced within CEL expressions, for example to delete adult content if the `delete_xxx` flag is set to `true`:
+这些标志可在 CEL 表达式中引用，例如在 `delete_xxx` 标志为 `true` 时删除成人内容：
 
 ```yaml
 if_else:
@@ -248,52 +248,52 @@ if_else:
   if_action: delete
 ```
 
-## Configuration
+## 配置
 
-The classifier can be customized by providing a `classifier.yml` file in a supported location [as described above](#source-precedence). If you only want to make some minor modifications, it may be convenient to specify these [using the main application configuration](/setup/configuration.html) instead, by providing values in either `config.yml` or as environment variables. The application configuration exposes some but not all properties of the classifier.
+可通过在支持的位置提供 `classifier.yml` 文件[如上所述](#源优先级)自定义分类器。如只需小幅修改，也可通过[主应用配置](/setup/configuration.html)指定，在 `config.yml` 或环境变量中提供部分分类器属性。
 
-For example, in your `config.yml` you could specify:
+例如，在 `config.yml` 中可指定：
 
 ```yaml
 classifier:
-  # specify a custom workflow to be used:
+  # 指定自定义工作流
   workflow: custom
-  # add to the core list of music keywords:
+  # 向核心音乐关键词列表添加自定义关键词
   keywords:
     music:
       - my-custom-music-keyword
-  # add a file extension to the list of audiobook-related extensions:
+  # 向有声书扩展名列表添加扩展名
   extensions:
     audiobook:
       - abc
-  # auto-delete all comics
+  # 自动删除所有漫画
   flags:
     delete_content_types:
       - comics
 ```
 
-Or as environment variables you could specify:
+或用环境变量指定：
 
 ```sh
-TMDB_ENABLED=false \ # disable the TMDB API integration
-  CLASSIFIER_WORKFLOW=custom \ # specify a custom workflow to be used
-  CLASSIFIER_DELETE_XXX=true \ # auto-delete all adult content
+TMDB_ENABLED=false \ # 禁用 TMDB API 集成
+  CLASSIFIER_WORKFLOW=custom \ # 指定自定义工作流
+  CLASSIFIER_DELETE_XXX=true \ # 自动删除所有成人内容
   bitmagnet worker run --all
 ```
 
-## Validation
+## 校验
 
-The classifier source is compiled on initial load, and all structural and syntax errors should be caught at compile time. If there are errors in your classifier source, **bitmagnet** should exit with an error message indicating the location of the problem.
+分类器源码在初始加载时编译，所有结构和语法错误会在编译时捕获。若分类器源码有误，**bitmagnet** 会退出并显示错误位置。
 
-## Reclassify torrents
+## 重新分类种子
 
-Read how to [reclassify torrents](/guides/reprocess-reclassify.html).
+阅读如何[重新分类种子](/guides/reprocess-reclassify.html)。
 
-## Practical use cases and examples
+## 实际用例与示例
 
-### Auto-delete specific content types
+### 自动删除特定内容类型
 
-The default workflow provides a flag that allows for automatically deleting specific content types. For example, to delete all `comic`, `software` and `xxx` torrents:
+默认工作流提供了自动删除特定内容类型的标志。例如，删除所有 `comic`、`software` 和 `xxx` 种子：
 
 ```yaml
 flags:
@@ -303,11 +303,11 @@ flags:
     - xxx
 ```
 
-Auto-deleting adult content has been one of the most requested features. For convenience, this is exposed as the configuration option `classifier.delete_xxx`, and can be specified with the environment variable `CLASSIFIER_DELETE_XXX=true`.
+自动删除成人内容是最常见的需求之一。为方便起见，可用配置项 `classifier.delete_xxx`，或环境变量 `CLASSIFIER_DELETE_XXX=true` 指定。
 
-### Auto-delete torrents containing specific keywords
+### 自动删除包含特定关键词的种子
 
-Any torrents containing keywords in the `banned` list will be automatically deleted. This is primarily used for deleting <abbr title="Child Sexual Abuse Material">CSAM</abbr> content, but the list can be extended to auto-delete any other keywords:
+任何包含 `banned` 列表关键词的种子都会被自动删除。主要用于删除 <abbr title="Child Sexual Abuse Material">CSAM</abbr> 内容，也可扩展列表自动删除其他关键词：
 
 ```yaml
 keywords:
@@ -315,68 +315,68 @@ keywords:
     - my-hated-keyword
 ```
 
-### Disable the TMDB API integration
+### 禁用 TMDB API 集成
 
-The `tmdb_enabled` flag can be used to disable the TMDB API integration:
+`tmdb_enabled` 标志可用于禁用 TMDB API 集成：
 
 ```yaml
 flags:
   tmdb_enabled: false
 ```
 
-For convenience, this is also exposed as the configuration option `tmdb.enabled`, and can be specified with the environment variable `TMDB_ENABLED=false`.
+同样可通过配置项 `tmdb.enabled` 或环境变量 `TMDB_ENABLED=false` 指定。
 
-The `apis_enabled` flag has the same effect, disabling TMDB and any future API integrations:
+`apis_enabled` 标志有同样效果，禁用 TMDB 及未来的 API 集成：
 
 ```yaml
 flags:
   apis_enabled: false
 ```
 
-API integrations can also be disabled for individual classifier runs, without disabling them globally, by passing the `--apisDisabled` flag to [the reprocess command](/guides/reprocess-reclassify.html).
+也可在单次分类时通过 [reprocess 命令](/guides/reprocess-reclassify.html)的 `--apisDisabled` 参数禁用 API 集成。
 
-### Extend the default workflow with custom logic
+### 用自定义逻辑扩展默认工作流
 
-Custom workflows can be added in the `workflows` section of the classifier document. It is possible to extend the default workflow by using the `run_workflow` action within your custom workflow, for example:
+可在分类器文档的 `workflows` 部分添加自定义工作流。可通过 `run_workflow` 动作在自定义工作流中扩展默认工作流，例如：
 
 ```yaml
 workflows:
   custom:
-    - <my custom action to be executed before the default workflow>
+    - <在默认工作流前执行的自定义动作>
     - run_workflow: default
-    - <my custom action to be executed after the default workflow>
+    - <在默认工作流后执行的自定义动作>
 ```
 
-A concrete example of this is adding tags to torrents based on custom criteria.
+具体示例：根据自定义条件为种子添加标签。
 
-### Use tags to create custom torrent categories
+### 用标签创建自定义种子分类
 
-Is there a category of torrent you're interested in that isn't captured by one of the core content types? Torrent tags are intended to capture custom categories and content types.
+有些你感兴趣的种子类别可能不在核心内容类型中。种子标签用于自定义类别和内容类型。
 
-Let's imagine you'd like to surface torrents containing interesting documents. The interesting documents have specific file extensions, and their filenames contain specific keywords. Let's create a custom action to tag torrents containing interesting documents:
+假设你想筛选包含有趣文档的种子，这些文档有特定扩展名，文件名包含特定关键词。可创建自定义动作为这些种子打标签：
 
 ```yaml
-# define file extensions for the documents we're interested in:
+# 定义感兴趣文档的扩展名
 extensions:
   interesting_documents:
     - doc
     - docx
     - pdf
-# define keywords that must be present in the filenames of the interesting documents:
+# 定义感兴趣文档文件名需包含的关键词
 keywords:
   interesting_documents:
     - interesting
     - fascinating
-# extend the default workflow with a custom workflow to tag torrents containing interesting documents:
+# 用自定义工作流扩展默认工作流，为包含有趣文档的种子打标签
 workflows:
   custom:
-    # first run the default workflow:
+    # 先运行默认工作流
     - run_workflow: default
-    # then add the tag to any torrents containing interesting documents:
+    # 再为包含有趣文档的种子添加标签
     - if_else:
         condition: "torrent.files.filter(f, f.extension in extensions.interesting_documents && f.basePath.matches(keywords.interesting_documents)).size() > 0"
         if_action:
           add_tag: interesting-documents
 ```
 
-To specify that the custom workflow should be used, remember to specify the `classifier.workflow` configuration option, e.g. `CLASSIFIER_WORKFLOW=custom bitmagnet worker run --all`.
+要指定使用自定义工作流，记得设置 `classifier.workflow` 配置项，如 `CLASSIFIER_WORKFLOW=custom bitmagnet worker run --all`。

@@ -1,16 +1,16 @@
 ---
-title: Installation
-description: Installation instructions for bitmagnet
+title: 安装
+description: bitmagnet 的安装说明
 parent: Setup
 layout: default
 nav_order: 1
 ---
 
-# Installation
+# 安装
 
 ## Docker
 
-The quickest way to get up-and-running with **bitmagnet** is with [Docker Compose](https://docs.docker.com/compose/). The following `docker-compose.yml` is a minimal example. For a more full-featured example including VPN routing and observability services see the [docker compose configuration in the GitHub repository](https://github.com/bitmagnet-io/bitmagnet/blob/main/docker-compose.yml).
+使用 [Docker Compose](https://docs.docker.com/compose/) 是最快速启动 **bitmagnet** 的方式。以下 `docker-compose.yml` 是一个最小示例。如需包含 VPN 路由和可观测性服务的更完整示例，请参见 [GitHub 仓库中的 docker compose 配置](https://github.com/bitmagnet-io/bitmagnet/blob/main/docker-compose.yml)。
 
 ```yml
 services:
@@ -18,9 +18,9 @@ services:
     image: ghcr.io/bitmagnet-io/bitmagnet:latest
     container_name: bitmagnet
     ports:
-      # API and WebUI port:
+      # API 和 WebUI 端口:
       - "3333:3333"
-      # BitTorrent ports:
+      # BitTorrent 端口:
       - "3334:3334/tcp"
       - "3334:3334/udp"
     restart: unless-stopped
@@ -35,7 +35,7 @@ services:
       - run
       - --keys=http_server
       - --keys=queue_server
-      # disable the next line to run without DHT crawler
+      # 禁用下一行可在无 DHT 爬虫的情况下运行
       - --keys=dht_crawler
     depends_on:
       postgres:
@@ -47,7 +47,7 @@ services:
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
     #    ports:
-    #      - "5432:5432" Expose this port if you'd like to dig around in the database
+    #      - "5432:5432" 如需访问数据库可开放此端口
     restart: unless-stopped
     environment:
       - POSTGRES_PASSWORD=postgres
@@ -62,9 +62,9 @@ services:
       interval: 10s
 ```
 
-After running `docker compose up -d` you should be able to access the web interface at `http://localhost:3333`. The DHT crawler should have started and you should see items appear in the web UI within around a minute.
+运行 `docker compose up -d` 后，你应该可以通过 `http://localhost:3333` 访问 Web 界面。DHT 爬虫会自动启动，大约一分钟内你会在 Web UI 中看到条目出现。
 
-To upgrade your installation you can run:
+如需升级安装，可以运行：
 
 ```sh
 docker compose down bitmagnet
@@ -74,30 +74,30 @@ docker compose up -d bitmagnet
 
 ## go install
 
-You can also install **bitmagnet** natively with `go install github.com/bitmagnet-io/bitmagnet`. If you choose this method you will need to [configure]({% link setup/configuration.md %}) (at a minimum) a Postgres instance for bitmagnet to connect to.
+你也可以通过 `go install github.com/bitmagnet-io/bitmagnet` 原生安装 **bitmagnet**。如果选择此方法，你需要[配置]({% link setup/configuration.md %})（至少）一个 Postgres 实例供 bitmagnet 连接。
 
-## Running the CLI
+## 运行 CLI
 
-The **bitmagnet** CLI is the entrypoint into the application. Take note of the command needed to run the CLI, depending on your installation method.
+**bitmagnet** CLI 是应用程序的入口。请根据你的安装方式注意运行 CLI 所需的命令。
 
-- If you are using the docker-compose example above, you can run the CLI (while the stack is started) with `docker exec -it bitmagnet bitmagnet`.
-- If you installed bitmagnet with `go install`, you can run the CLI with `bitmagnet`.
+- 如果你使用上述 docker-compose 示例，可以在服务启动后通过 `docker exec -it bitmagnet bitmagnet` 运行 CLI。
+- 如果你通过 `go install` 安装 bitmagnet，可以直接用 `bitmagnet` 运行 CLI。
 
-When referring to CLI commands in the rest of the documentation, for simplicity we will use `bitmagnet`; please substitute this for the correct command. For example, to show the CLI help, run:
+在后续文档中，CLI 命令统一用 `bitmagnet` 表示；请根据实际情况替换为正确的命令。例如，查看 CLI 帮助信息：
 
 ```sh
 bitmagnet --help
 ```
 
-## Starting **bitmagnet**
+## 启动 **bitmagnet**
 
-**bitmagnet** runs as multiple worker processes that can be started either individually or all at once. To start all workers, run:
+**bitmagnet** 以多个 worker 进程运行，可以单独启动，也可以一次性全部启动。要启动所有 worker，请运行：
 
 ```sh
 bitmagnet worker run --all
 ```
 
-Alternatively, specify individual workers to start:
+或者，指定要启动的单个 worker：
 
 ```sh
 bitmagnet worker run --keys=http_server,queue_server,dht_crawler

@@ -1,86 +1,86 @@
 ---
-title: FAQ
-description: Frequently Asked Questions about bitmagnet
+title: 常见问题
+description: 关于 bitmagnet 的常见问题解答
 layout: default
 nav_order: 1
 ---
 
-# Frequently Asked Questions
+# 常见问题解答
 
-## Does **bitmagnet** download or distribute any illegal or copyright-infringing content?
+## **bitmagnet** 会下载或分发任何非法或侵犯版权的内容吗？
 
-No. **bitmagnet** does not download, store or distribute any content _at all_. It only downloads **metadata about** content. It may download **metadata about** illegal or copyright infringing content, and users should therefore exercise discretion in any magnet links they add to their BitTorrent client. **bitmagnet** attempts to detect and filter harmful content such as <abbr title="Child Sexual Abuse Material">CSAM</abbr> to avoid users having such undesirable metadata in their index.
+不会。**bitmagnet** 完全不会下载、存储或分发任何内容。它只会下载内容的**元数据**。不过，它可能会下载关于非法或侵权内容的**元数据**，因此用户在将磁力链接添加到自己的 BitTorrent 客户端时应谨慎操作。**bitmagnet** 会尝试检测并过滤有害内容（如<abbr title="儿童性虐待材料">CSAM</abbr>），以避免用户的索引中出现这些不良元数据。
 
-## Should I use a VPN with **bitmagnet**?
+## 使用 **bitmagnet** 时需要使用 VPN 吗？
 
-It is recommended to use a VPN: **bitmagnet** may download **metadata about** illegal and copyrighted content. It is possible that rudimentary law enforcement and anti-piracy tracking tools would incorrectly flag this activity, although we've never heard about anyone getting into trouble for using this or similar metadata crawlers. Setting up a VPN is simple and cheap, and it's better to be safe than sorry. We are not affiliated with any VPN providers, but if you're unsure which provider to choose, we can recommend [Mullvad](https://mullvad.net/) and [ProtonVPN](https://protonvpn.com/).
+建议使用 VPN：**bitmagnet** 可能会下载关于非法或受版权保护内容的**元数据**。某些执法或反盗版追踪工具可能会误判此类行为，尽管我们尚未听说有人因使用本软件或类似元数据爬虫而遇到麻烦。VPN 设置简单且价格低廉，安全总比后悔好。我们与任何 VPN 服务商无关，但如果你不确定选择哪家，可以考虑 [Mullvad](https://mullvad.net/) 和 [ProtonVPN](https://protonvpn.com/)。
 
-## Is **bitmagnet** intended to be used as a public service?
+## **bitmagnet** 适合用作公共服务吗？
 
-No, it was designed to be self-hosted. The UI and API allow destructive actions, and no security or scalability review has taken place, so it's not advised. An API is exposed, that could in theory be used to build a public service, but it's not going to be the focus of this project to support that use case.
+不适合，它是为自托管设计的。UI 和 API 允许执行破坏性操作，且未经过安全性或可扩展性审查，因此不建议作为公共服务使用。虽然暴露了 API，理论上可以用来构建公共服务，但本项目不会以此为主要目标。
 
-## What are the system requirements for **bitmagnet**?
+## **bitmagnet** 的系统要求是什么？
 
-As a rough guide, you should allow around 300MB RAM for BitMagnet, and at least 1GB RAM for the Postgres database. You should allow roughly 80GB of disk space per 10 million torrents, which should suffice for several months of crawling, however there is no upper limit to how many torrents might ultimately be crawled. The database will run fastest when it has plenty of RAM and a fast disk, preferably a SSD.
+大致建议为 BitMagnet 分配约 300MB 内存，Postgres 数据库至少 1GB 内存。每 1,000 万个种子文件大约需要 80GB 磁盘空间，这足以支持几个月的爬取，但最终爬取的种子数量没有上限。数据库在拥有充足内存和快速磁盘（最好是 SSD）时运行最快。
 
-## I've started **bitmagnet** for the first time and am not seeing torrents right away, is something wrong?
+## 我第一次启动 **bitmagnet** 没有马上看到种子，是不是哪里出问题了？
 
-If everything is working, **bitmagnet** should begin showing torrents in the web UI within a maximum of 10 minutes (which is its cache TTL). The refresh button at the top of the torrent listing is a cache buster - use it to see new torrent content in real time. Bear in mind that when a torrent is inserted into the database, a background queue job must run before it will become available in the UI. If you're importing thousands or millions of torrents, it might therefore take a while for everything to show. Check the next question if you're still not seeing torrents.
+如果一切正常，**bitmagnet** 应该会在最多 10 分钟内（缓存 TTL）在 Web UI 中显示种子。种子列表顶部的刷新按钮可以强制刷新缓存，实时查看新内容。请注意，种子插入数据库后，需要后台队列任务运行后才能在 UI 中显示。如果你导入了成千上万个种子，全部显示出来可能需要一段时间。如果仍未看到种子，请查看下一个问题。
 
-## **bitmagnet** isn't finding any new torrents, what's wrong?
+## **bitmagnet** 找不到新种子，怎么回事？
 
 {: .warning-title }
 
-> Important
+> 重要提示
 >
-> **bitmagnet** is known to work well on Linux and MacOS; if it isn't finding new torrents when running on these platforms, this is probably due to a misconfiguration, rather than a bug in the software.
+> **bitmagnet** 在 Linux 和 MacOS 上运行良好；如果在这些平台上无法找到新种子，通常是配置问题，而不是软件 bug。
 >
-> Note that some Windows users have reported issues: if you are having issues on Windows, then for now it's advisable to run the software on Linux or MacOS instead.
+> 有 Windows 用户报告过相关问题：如果你在 Windows 上遇到问题，建议暂时在 Linux 或 MacOS 上运行本软件。
 
-**bitmagnet** now shows its health status in the main toolbar: It will show a tick for health, a cross for unhealthy or sometimes 3 dots for pending. Click on it to open the health dialog and check that all workers are running and healthy.
+**bitmagnet** 现在会在主工具栏显示健康状态：健康时显示对勾，不健康时显示叉号，有时会显示三个点表示待定。点击可打开健康对话框，检查所有 worker 是否正常运行。
 
-![WebUI health check screenshot](/assets/images/webui-health-check.png)
+![WebUI 健康检查截图](/assets/images/webui-health-check.png)
 
-The most common issues are networking, firewall or a VPN misconfigurations preventing **bitmagnet** from connecting to the DHT. Additionally, the TMDB API is blocked in certain countries; if you are in an affected country you may need to either disable the TMDB integration with the `tmdb.enabled` configuration key, or use a VPN. Configuring a personal TMDB API key (or disabling TMDB) will make the queue run a **lot** faster.
+最常见的问题是网络、防火墙或 VPN 配置错误，导致 **bitmagnet** 无法连接到 DHT。此外，TMDB API 在某些国家被屏蔽；如遇此情况，可通过 `tmdb.enabled` 配置项禁用 TMDB 集成，或使用 VPN。配置个人 TMDB API 密钥（或禁用 TMDB）会让队列运行**更快**。
 
-The dashboard can be used to monitor queue throughput. On the queues dashboard, the following would indicate a problem:
+可通过仪表盘监控队列吞吐量。队列仪表盘上，以下情况表明存在问题：
 
-- A high number of pending jobs, and the number of processed jobs not increasing over time
-- A high number of failed jobs
-- No new jobs being created over time
+- 待处理任务数量很高，已处理任务数长时间未增加
+- 失败任务数量很高
+- 长时间没有新任务生成
 
-## Why doesn't **bitmagnet** show me exactly how many torrents it has indexed?
+## 为什么 **bitmagnet** 没有精确显示已索引的种子数量？
 
-Torrents are indexed to a Postgres database, and Postgres is notoriously slow in counting large numbers of rows. To provide acceptable performance, **bitmagnet** uses a strategy it calls a "budgeted count". This takes advantage of the fact that the Postgres query planner can provide an estimated count, along with the total cost of executing the count query. If the cost exceeds the budget, we return the estimate, and the UI will show an estimate symbol `~`. If the cost is within budget, we return the exact count. For large result sets, you will probably always be seeing an estimate.
+种子索引在 Postgres 数据库中，而 Postgres 在统计大量行时速度很慢。为保证性能，**bitmagnet** 采用了“预算计数”策略。它利用 Postgres 查询规划器提供的估算值和查询成本。如果成本超出预算，则返回估算值，UI 会显示 `~` 估算符号；如果成本在预算内，则返回精确计数。对于大型结果集，通常只能看到估算值。
 
-## At what rate will **bitmagnet** crawl torrents from the DHT?
+## **bitmagnet** 从 DHT 爬取种子的速度是多少？
 
-This will depend on a number of factors, including your hardware and network conditions, and your [`dht_crawler.scaling_factor` configuration](/setup/configuration.html). Typically it can be anything from 100 to 1,000 torrents per minute. Crawling is likely to slow down as your index grows larger, as it's more likely that any discovered torrent will already be in your index.
+这取决于硬件、网络状况和 [`dht_crawler.scaling_factor` 配置](/setup/configuration.html)。通常每分钟可爬取 100 到 1,000 个种子。随着索引规模增大，爬取速度可能变慢，因为新发现的种子更可能已存在于索引中。
 
-## How can I see exactly how many torrents **bitmagnet** has crawled in the current session?
+## 如何查看本次会话中 **bitmagnet** 爬取的种子总数？
 
-The new dashboard shows throughput of the crawler and job queue. Alternatively, visit the metrics endpoint at `/metrics` and check the metric `bitmagnet_dht_crawler_persisted_total`. `{entity="Torrent"}` corresponds to newly crawled torrents, and `{entity="TorrentsTorrentSource"}` corresponds to torrents that were rediscovered and had their seeders/leechers count, and last-seen-on date updated.
+新仪表盘可显示爬虫和任务队列的吞吐量。或者访问 `/metrics` 端点，查看指标 `bitmagnet_dht_crawler_persisted_total`。`{entity="Torrent"}` 表示新爬取的种子，`{entity="TorrentsTorrentSource"}` 表示重新发现并更新了做种/下载数和最后发现时间的种子。
 
-## How are the seeders/leechers numbers determined for torrents crawled from the DHT?
+## **bitmagnet** 如何确定 DHT 爬取种子的做种/下载数？
 
-The DHT crawler uses a [BEP33 scrape request](https://www.bittorrent.org/beps/bep_0033.html) to provide a very rough estimate of the current seeders/leechers.
+DHT 爬虫使用 [BEP33 scrape 请求](https://www.bittorrent.org/beps/bep_0033.html) 来粗略估算当前的做种/下载数。
 
-## How do I know if a torrent crawled by **bitmagnet** is being actively seeded, and that I'll be able to download it?
+## 如何判断 **bitmagnet** 爬取的种子是否有人做种，能否下载？
 
-The short answer is you can't. The only way to know for sure is to add an info hash to your BitTorrent client. The seeders/leechers count provides an imperfect indicator of the torrent's health. In future **bitmagnet** may provide "decentralized tracker"-like features that would improve this.
+简短的答案是无法确定。唯一的办法是将 info hash 添加到 BitTorrent 客户端。做种/下载数只能作为种子健康度的不完美参考。未来 **bitmagnet** 可能会提供“去中心化 tracker”等功能以改善这一点。
 
-## Can I ask **bitmagnet**'s DHT crawler to crawl specific hashes?
+## 可以让 **bitmagnet** 的 DHT 爬虫爬取指定的 hash 吗？
 
-No. The DHT crawler works by sampling random info hashes from the network, and was not designed to locate specific hashes - it only crawls what it finds by chance. You can use the import [the `/import` endpoint](/guides/import.html) to import specific torrents, and additional methods (separate from the DHT crawler) may be added in future.
+不能。DHT 爬虫通过从网络中随机采样 info hash 工作，无法定位指定 hash——它只能爬取偶然发现的内容。你可以通过 [导入 `/import` 端点](/guides/import.html) 导入特定种子，未来可能会增加其他（独立于 DHT 爬虫的）方法。
 
-## I'm seeing a lot of torrents in the "Unknown" category, that are clearly of a particular content type - what's wrong?
+## 为什么有很多种子被归为“未知”类别，明明它们有明确的内容类型？
 
-**bitmagnet** is in early development, and improving the classifier will be an ongoing effort. When new versions are released, you can follow the [reclassify turorial](/tutorials/reprocess-reclassify.html) to reclassify torrents. If you'd like to [improve or customize the classifier](/guides/classifier.html), this is also possible.
+**bitmagnet** 仍处于早期开发阶段，分类器会持续改进。新版本发布后，你可以按照[重新分类教程](/tutorials/reprocess-reclassify.html)重新分类种子。如果你想[改进或自定义分类器](/guides/classifier.html)，也是可以的。
 
-## How can I make **bitmagnet** automatically delete torrents I'm not interested in?
+## 如何让 **bitmagnet** 自动删除我不感兴趣的种子？
 
-A better question would be: why bother? Disk space is inexpensive in the quantities required by **bitmagnet**, and searching is easier than deleting. Nevertheless this is one of the most commonly asked questions, and it is possible to do this by [customizing the classifier](/guides/classifier.html). Please consider the wastage of resources and load on the network created by deleting what you've crawled. Also remember that the classifier isn't perfect: for example, enabling deletion of XXX content will also delete anything that has been mis-identified as XXX by the classifier, preventing you from finding it in future - for example because it contains a rude word. If you are deleting a large proportion of what you're crawling, you are almost certainly deleting over-zealously and you should consider just using one of the many indexer sites instead.
+更好的问题是：为什么要删除？**bitmagnet** 所需的磁盘空间很便宜，搜索比删除更方便。不过这是最常见的问题之一，可以通过[自定义分类器](/guides/classifier.html)实现自动删除。请考虑删除已爬取内容会造成资源浪费和网络负担。分类器也并不完美：比如启用删除 XXX 内容，也会删除被误判为 XXX 的内容，导致你以后无法找到它们——比如因为包含了敏感词。如果你删除了很大比例的内容，说明你删除得太多了，建议直接使用现有的索引站点。
 
-## Can I run multiple **bitmagnet** instances pointing to the same database?
+## 可以运行多个 **bitmagnet** 实例连接同一个数据库吗？
 
-Yes you can, just point multiple instances to one database and it will work - _but_ it will put more load on the database and cause the app to run slower. An alternative is to run multiple instances with multiple databases, and periodically [merge the databases](/guides/backup-restore-merge.html).
+可以，只需让多个实例指向同一个数据库即可——**但**这会增加数据库负载，导致应用变慢。另一种方式是运行多个实例和多个数据库，定期[合并数据库](/guides/backup-restore-merge.html)。

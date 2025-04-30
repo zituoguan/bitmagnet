@@ -1,55 +1,55 @@
 ---
-title: Home
+title: 首页
 layout: default
 nav_order: -1
 ---
 
 # bitmagnet
 
-**A self-hosted BitTorrent indexer, DHT crawler, content classifier and torrent search engine with web UI, GraphQL API and Servarr stack integration.**
+**一个自托管的 BitTorrent 索引器、DHT 爬虫和内容分类工具。**
 
-![WebUI screenshot](/assets/images/webui-1.png)
+![WebUI 截图](/assets/images/webui-1.png)
 
 {: .warning-title }
 
-> Important
+> 重要提示
 >
-> This software is currently in alpha. It is ready to preview some interesting and unique features, but there will likely be bugs, as well as API and database schema changes before the (currently theoretical) 1.0 release. If you'd like to support this project and help it gain momentum, please **[give it a star on GitHub](https://github.com/bitmagnet-io/bitmagnet)** or **[sponsor it on OpenCollective](https://opencollective.com/bitmagnet)**.
+> 本软件目前处于 alpha 阶段。你可以抢先体验一些有趣且独特的功能，但在 1.0 正式版发布前（目前还只是理论上的），可能会有 bug，以及 API 和数据库结构的变动。如果你愿意支持本项目并帮助其发展，请 **[在 GitHub 上点个星](https://github.com/bitmagnet-io/bitmagnet)** 或 **[在 OpenCollective 上赞助](https://opencollective.com/bitmagnet)**。
 
-## DHT what now...?
+## DHT 是什么？
 
-The DHT crawler is **bitmagnet**'s killer feature that makes it unique. So what is it?
+DHT 爬虫是 **bitmagnet** 的核心特色。那么它到底是什么？
 
-You might be aware that you can enable DHT in your BitTorrent client, and that this allows you find peers who are announcing a torrent's hash to a Distributed Hash Table (DHT), rather than to a centralized tracker. DHT's lesser known feature is that it allows you to crawl the info hashes it knows about. This is how **bitmagnet**'s DHT crawler works - it crawls the DHT network, requesting metadata about each info hash it discovers. It then further enriches this metadata by attempting to classify it and associate it with known pieces of content, such as movies and TV shows. It then allows you to search everything it has indexed.
+你可能知道可以在 BitTorrent 客户端中启用 DHT，这样就能通过分布式哈希表（DHT）找到发布某个种子哈希的节点，而不依赖中心化的 tracker。DHT 还有一个鲜为人知的功能：它允许你爬取它已知的 info hash。**bitmagnet** 的 DHT 爬虫正是这样工作的——它遍历 DHT 网络，获取发现的每个 info hash 的元数据，并尝试对这些元数据进行分类，关联到已知的内容（如电影和电视剧）。你可以搜索所有已索引的内容。
 
-This means that **bitmagnet** is not reliant on any external trackers or torrent indexers. It's a self-contained, self-hosted torrent indexer, connected via DHT to a global network of peers and constantly discovering new content.
+这意味着 **bitmagnet** 不依赖任何外部 tracker 或种子索引站。它是一个自包含、自托管的种子索引器，通过 DHT 连接到全球节点网络，不断发现新内容。
 
-## Features & Roadmap
+## 功能与路线图
 
-### Currently implemented features
+### 已实现功能
 
-- [x] A DHT crawler and protocol implementation
-- [x] A generic BitTorrent indexer: **bitmagnet** can index torrents from any source, not only the DHT network - currently this is only possible via [the `/import` endpoint](/guides/import.html); more user-friendly methods are in the pipeline, see high-priority features below
-- [x] A highly customizable <a href="/guides/classifier.html">content classifier</a> that can currently identify many types of content, along with key related attributes such as language, resolution, source (BluRay, webrip etc.) and enriches this with data from sources including [The Movie Database](https://www.themoviedb.org/)
-- [x] [An import facility for ingesting torrents from any source, for example the RARBG backup](/guides/import.html)
-- [x] A torrent search engine
-- [x] A GraphQL API: currently this provides a single search query; there is also an embedded GraphQL playground at `/graphql`
-- [x] A responsive, multilingual web user interface implemented in Angular
-- [x] [A Torznab-compatible endpoint for integration with the Serverr stack](/guides/servarr-integration.html)
-- [x] A WebUI dashboard for monitoring and administration
+- [x] DHT 爬虫及协议实现
+- [x] 通用 BitTorrent 索引器：**bitmagnet** 可索引来自任何来源的种子，不仅限于 DHT 网络——目前仅支持通过 [`/import` 接口](/guides/import.html) 导入；更友好的方式正在开发中，见下方高优先级功能
+- [x] 高度可定制的 <a href="/guides/classifier.html">内容分类器</a>，可识别多种内容类型及相关属性（如语言、分辨率、来源等），并结合 [The Movie Database](https://www.themoviedb.org/) 等数据源丰富信息
+- [x] [支持从任意来源导入种子，例如 RARBG 备份](/guides/import.html)
+- [x] 种子搜索引擎
+- [x] GraphQL API：目前提供单一搜索查询，内置 GraphQL playground（`/graphql`）
+- [x] 响应式多语言 Web UI（Angular 实现）
+- [x] [兼容 Torznab 的接口，方便与 Serverr 生态集成](/guides/servarr-integration.html)
+- [x] WebUI 仪表盘，便于监控和管理
 
-### High priority features not yet implemented
+### 高优先级待实现功能
 
-- [ ] Authentication, API keys, access levels etc.
-- [ ] Saved searches for content of particular interest, enabling custom feeds in addition to the following feature
-- [ ] Bi-directional integration with the [Prowlarr indexer proxy](https://prowlarr.com/): Currently **bitmagnet** can be added as an indexer in Prowlarr; bi-directional integration would allow **bitmagnet** to crawl content from any indexer configured in Prowlarr, unlocking many new sources of content
+- [ ] 认证、API 密钥、访问级别等
+- [ ] 收藏搜索，支持自定义订阅源
+- [ ] 与 [Prowlarr 索引代理](https://prowlarr.com/) 双向集成：目前可将 **bitmagnet** 作为 Prowlarr 的索引器，未来计划支持从 Prowlarr 配置的任意索引器爬取内容，解锁更多内容来源
 
-### Pipe dream features
+### 未来畅想功能
 
-This is where things start to get a bit nebulous. For now all focus is on delivering the core features above, but some of these ideas could be explored in future:
+这些想法目前还很模糊，现阶段专注于核心功能，但未来可能会探索：
 
-- [ ] In-place seeding: identify files on your computer that are part of an indexed torrent, and allow them to be seeded in place after having moved, renamed or deleted parts of the torrent
-- [ ] Integration with popular BitTorrent clients
-- [ ] Federation of some sort: allow friends to connect instances and pool the indexing effort, perhaps involving crowd sourcing manual content curation to supplement the automated classifiers
-- [ ] Something that looks like a decentralized private tracker; by this I probably mean something that's based partly on personal trust and manually weeding out any bad actors; I'd be wary of creating something that looks a bit like [Tribler](https://github.com/Tribler/tribler), which while an interesting project seems to have demonstrated that implementing trust, reputation and privacy at the protocol level carries too much overhead to be a compelling alternative to plain old BitTorrent, for all its imperfections
-- [ ] Support for the [BitTorrent v2 protocol](https://blog.libtorrent.org/2020/09/bittorrent-v2/): It remains to be seen if wider adoption will ever make this a valuable feature
+- [ ] 原地做种：识别本地与已索引种子相关的文件，支持在移动、重命名或删除部分文件后继续做种
+- [ ] 集成主流 BitTorrent 客户端
+- [ ] 联邦模式：允许好友互联实例，共享索引工作，或通过众包补充自动分类器
+- [ ] 类去中心化私人 tracker：基于个人信任和手动筛选，避免出现像 [Tribler](https://github.com/Tribler/tribler) 那样协议层实现信任和隐私带来的高开销
+- [ ] 支持 [BitTorrent v2 协议](https://blog.libtorrent.org/2020/09/bittorrent-v2/)：是否值得加入，取决于后续生态发展

@@ -1,6 +1,6 @@
 ---
-title: Backup, Restore & Merge
-description: How to backup, restore, merge and share bitmagnet databases
+title: 备份、恢复与合并
+description: 如何备份、恢复、合并和共享 bitmagnet 数据库
 parent: Guides
 layout: default
 nav_order: 7
@@ -8,28 +8,28 @@ redirect_from:
   - /tutorials/backup-restore-merge.html
 ---
 
-# Backup, Restore & Merge
+# 备份、恢复与合并
 
-It's a good idea to take periodic backups of the **bitmagnet** database. A system crash might corrupt the database, in which case you could see the dreaded `PANIC: could not locate a valid checkpoint record` when starting Postgres.
+定期备份 **bitmagnet** 数据库是个好主意。系统崩溃可能会导致数据库损坏，这种情况下你在启动 Postgres 时可能会看到可怕的 `PANIC: could not locate a valid checkpoint record` 错误。
 
-Perhaps you'd like to move your **bitmagnet** installation to a new server, or you'd like to merge the data from two **bitmagnet** installations.
+也许你想将 **bitmagnet** 安装迁移到新服务器，或者你想合并两个 **bitmagnet** 实例的数据。
 
-This tutorial will show you how to backup, restore and merge **bitmagnet** databases.
+本教程将向你展示如何备份、恢复和合并 **bitmagnet** 数据库。
 
 {: .note-title }
 
-> Pre-requisites
+> 前置条件
 >
-> - [x] You'll need to have `pg_dump` and `psql` installed. These are part of the PostgreSQL package. Use Google to find out how to install these tools on your operating system.
+> - [x] 你需要安装 `pg_dump` 和 `psql`。它们是 PostgreSQL 套件的一部分。请使用 Google 查找如何在你的操作系统上安装这些工具。
 
-## Taking a backup
+## 备份
 
 {: .warning }
-If you intend to import your backup to another **bitmagnet** instance, you should ensure the other instance is the same version. If the other instance is already a higher version, you'll need to upgrade the instance you're backing up from before taking a backup.
+如果你打算将备份导入到另一个 **bitmagnet** 实例，请确保目标实例的版本与源实例相同。如果目标实例版本更高，你需要先升级源实例再进行备份。
 
-The following command will take a backup of the critical **bitmagnet** data and save it to a file named `export.sql`. (note this is not a full backup of the database which would include creation of tables, indexes etc.). By exporting with the `--data-only` flag the resulting file can be imported into a new or existing installation, after **bitmagnet** has run its migrations to set up the database and tables.
+以下命令将备份关键的 **bitmagnet** 数据，并保存到名为 `export.sql` 的文件中。（注意，这不是数据库的完整备份，不包括表、索引等的创建。）通过使用 `--data-only` 标志导出，生成的文件可以在 **bitmagnet** 运行迁移以设置数据库和表后，导入到新的或现有的安装中。
 
-Please refer to [the `pg_dump` documentation](https://www.postgresql.org/docs/current/app-pgdump.html) and ensure to specify the correct values (e.g. `host`, `username` and `password`) for the source database.
+请参考 [pg_dump 官方文档](https://www.postgresql.org/docs/current/app-pgdump.html)，并确保为源数据库指定正确的参数（如 `host`、`username` 和 `password`）。
 
 ```sh
 pg_dump \
@@ -54,13 +54,13 @@ pg_dump \
         > backup.sql
 ```
 
-## Restoring a backup, or merging into another **bitmagnet** instance
+## 恢复备份或合并到另一个 **bitmagnet** 实例
 
-First, ensure you have a target **bitmagnet** instance up and running, _of the same version from which the backup was taken_.
+首先，确保你有一个目标 **bitmagnet** 实例正在运行，且版本与备份来源一致。
 
-The following command will import the backup file into the target database, merging the data with any existing data.
+以下命令会将备份文件导入到目标数据库，并与现有数据合并。
 
-Please refer to [the `psql` documentation](https://www.postgresql.org/docs/current/app-psql.html) and ensure to specify the correct values (e.g. `host`, `username` and `password`) for the target database.
+请参考 [psql 官方文档](https://www.postgresql.org/docs/current/app-psql.html)，并确保为目标数据库指定正确的参数（如 `host`、`username` 和 `password`）。
 
 ```sh
 psql bitmagnet < backup.sql

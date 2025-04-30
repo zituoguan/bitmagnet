@@ -1,25 +1,25 @@
 title: bitmagnet
-tagline: "Self-hosted BitTorrent indexer, DHT crawler, content classifier and torrent search engine"
-description: "A self-hosted BitTorrent indexer, DHT crawler, content classifier and torrent search engine with web UI, GraphQL API and Servarr stack integration."
+tagline: "自托管的 BitTorrent 索引器、DHT 爬虫、内容分类器和种子搜索引擎"
+description: "一个带有 Web UI、GraphQL API 和 Servarr 集成的自托管 BitTorrent 索引器、DHT 爬虫、内容分类器和种子搜索引擎。"
 baseurl: ""
-url: "https://bitmagnet.io"
+url: "https://bitmagnet.zituoguan.com"
 markdown: kramdown
 theme: just-the-docs
-callouts_level: quiet # or loud
+callouts_level: quiet # 或 loud
 callouts:
   highlight:
     color: yellow
   important:
-    title: Important
+    title: 重要
     color: blue
   new:
-    title: New
+    title: 新
     color: green
   note:
-    title: Note
+    title: 注
     color: purple
   warning:
-    title: Warning
+    title: 警告
     color: red
 nav_external_links:
   - title: Discord

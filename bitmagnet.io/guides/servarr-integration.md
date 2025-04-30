@@ -1,6 +1,6 @@
 ---
-title: Servarr Integration
-description: Integrating bitmagnet with applications from the Servarr stack
+title: Servarr 集成
+description: 将 bitmagnet 与 Servarr 堆栈中的应用程序集成
 parent: Guides
 layout: default
 nav_order: 8
@@ -8,18 +8,18 @@ redirect_from:
   - /tutorials/servarr-integration.html
 ---
 
-# Servarr Integration
+# Servarr 集成
 
-**bitmagnet**'s HTTP server exposes an endpoint at `/torznab`, allowing it to integrate with any application that supports [the Torznab specification](https://torznab.github.io/spec-1.3-draft/index.html), most notably apps in [the Servarr stack](https://wiki.servarr.com/) (Prowlarr, Sonarr, Radarr etc.).
+**bitmagnet** 的 HTTP 服务器在 `/torznab` 端点提供服务，使其能够与支持 [Torznab 规范](https://torznab.github.io/spec-1.3-draft/index.html) 的任何应用程序集成，尤其是 [Servarr 堆栈](https://wiki.servarr.com/)（如 Prowlarr、Sonarr、Radarr 等）中的应用。
 
-## Adding **bitmagnet** as an indexer in Prowlarr
+## 在 Prowlarr 中添加 **bitmagnet** 作为索引器
 
-To get started, open your Prowlarr instance, click "Add Indexer", and select "Generic Torznab" from the list.
+首先，打开你的 Prowlarr 实例，点击“添加索引器”，然后从列表中选择“Generic Torznab”。
 
-![Prowlarr Add Indexer](/assets/images/prowlarr-1.png)
+![Prowlarr 添加索引器](/assets/images/prowlarr-1.png)
 
-The required settings are fairly basic. Assuming you've adapted from the [example docker-compose file]({% link setup/installation.md %}#docker), and Prowlarr is on the same Docker network as **bitmagnet**, then Prowlarr should be able to access the Torznab endpoint of your **bitmagnet** instance at `http://bitmagnet:3333/torznab`. No further configuration should be needed, just click the "Test" button to ensure everything is working.
+所需设置非常简单。如果你已经按照 [示例 docker-compose 文件]({% link setup/installation.md %}#docker) 进行了部署，并且 Prowlarr 与 **bitmagnet** 处于同一个 Docker 网络中，那么 Prowlarr 应该可以通过 `http://bitmagnet:3333/torznab` 访问 **bitmagnet** 实例的 Torznab 端点。无需进一步配置，只需点击“测试”按钮，确保一切正常。
 
-![Prowlarr configure bitmagnet](/assets/images/prowlarr-2.png)
+![Prowlarr 配置 bitmagnet](/assets/images/prowlarr-2.png)
 
-[Depending on your Prowlarr configuration](https://wiki.servarr.com/prowlarr/settings#applications), the **bitmagnet** indexer should now be synced to your other \*arr applications. Alternatively, you can add **bitmagnet** as an indexer directly in those applications, following the same steps as above.
+[根据你的 Prowlarr 配置](https://wiki.servarr.com/prowlarr/settings#applications)，**bitmagnet** 索引器现在应该已经同步到你的其他 \*arr 应用程序。或者，你也可以直接在这些应用中添加 **bitmagnet** 作为索引器，步骤与上述相同。

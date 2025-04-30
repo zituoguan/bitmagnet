@@ -15,7 +15,7 @@
     },
     "action__add_tag": {
       "additionalProperties": false,
-      "description": "Add one or more tags to the current torrent",
+      "description": "为当前种子添加一个或多个标签",
       "properties": {
         "add_tag": {
           "items": {
@@ -31,27 +31,27 @@
     },
     "action__attach_local_content_by_id": {
       "const": "attach_local_content_by_id",
-      "description": "Use the torrent hint to attach locally stored content by ID"
+      "description": "使用种子提示通过ID关联本地存储的内容"
     },
     "action__attach_local_content_by_search": {
       "const": "attach_local_content_by_search",
-      "description": "Attempt to attach local content with a search on the torrent name"
+      "description": "尝试通过种子名称搜索关联本地内容"
     },
     "action__attach_tmdb_content_by_id": {
       "const": "attach_tmdb_content_by_id",
-      "description": "Use the torrent hint to attach content from the TMDB API by ID"
+      "description": "使用种子提示通过ID关联TMDB API的内容"
     },
     "action__attach_tmdb_content_by_search": {
       "const": "attach_tmdb_content_by_search",
-      "description": "Attempt to attach content from the TMDB API with a search on the torrent name"
+      "description": "尝试通过种子名称搜索关联TMDB API的内容"
     },
     "action__delete": {
       "const": "delete",
-      "description": "Delete the current torrent"
+      "description": "删除当前种子"
     },
     "action__find_match": {
       "additionalProperties": false,
-      "description": "Iterate through a series of actions to find the first that does not return an unmatched error",
+      "description": "遍历一系列操作，查找第一个未返回unmatched错误的操作",
       "properties": {
         "find_match": {
           "items": {
@@ -67,7 +67,7 @@
     },
     "action__if_else": {
       "additionalProperties": false,
-      "description": "Execute an action based on a condition",
+      "description": "根据条件执行操作",
       "properties": {
         "if_else": {
           "additionalProperties": false,
@@ -95,15 +95,15 @@
     },
     "action__parse_date": {
       "const": "parse_date",
-      "description": "Try to parse a date from the name of the current torrent"
+      "description": "尝试从当前种子的名称中解析日期"
     },
     "action__parse_video_content": {
       "const": "parse_video_content",
-      "description": "Parse video-related attributes from the name of the current torrent"
+      "description": "从当前种子的名称中解析与视频相关的属性"
     },
     "action__run_workflow": {
       "additionalProperties": false,
-      "description": "Run a different workflow within the current workflow",
+      "description": "在当前工作流中运行其他工作流",
       "properties": {
         "run_workflow": {
           "items": {
@@ -120,7 +120,7 @@
     },
     "action__set_content_type": {
       "additionalProperties": false,
-      "description": "Set the content type of the current torrent",
+      "description": "设置当前种子的内容类型",
       "properties": {
         "set_content_type": {
           "enum": [
@@ -145,7 +145,7 @@
     },
     "action__unmatched": {
       "const": "unmatched",
-      "description": "Return a unmatched error for the current torrent"
+      "description": "为当前种子返回unmatched错误"
     },
     "action_multi": {
       "items": {
@@ -216,7 +216,7 @@
       "additionalProperties": false,
       "properties": {
         "and": {
-          "description": "A condition that is satisfied if all conditions in a list are satisfied",
+          "description": "如果列表中的所有条件都满足，则该条件满足",
           "items": {
             "$ref": "#/definitions/condition"
           },
@@ -234,7 +234,7 @@
           "additionalProperties": false,
           "properties": {
             "expression": {
-              "description": "A CEL expression describing a condition",
+              "description": "描述条件的CEL表达式",
               "minLength": 1,
               "type": "string"
             }
@@ -245,7 +245,7 @@
           "type": "object"
         },
         {
-          "description": "A CEL expression describing a condition",
+          "description": "描述条件的CEL表达式",
           "minLength": 1,
           "type": "string"
         }
@@ -253,7 +253,7 @@
     },
     "condition__not": {
       "additionalProperties": false,
-      "description": "A condition that negates the provided condition",
+      "description": "对提供的条件取反",
       "properties": {
         "not": {
           "$ref": "#/definitions/condition"
@@ -268,7 +268,7 @@
       "additionalProperties": false,
       "properties": {
         "or": {
-          "description": "A condition that is satisfied if any of the conditions in a list are satisfied",
+          "description": "如果列表中任一条件满足，则该条件满足",
           "items": {
             "$ref": "#/definitions/condition"
           },
