@@ -1,7 +1,7 @@
 ---
 title: 重新处理与重新分类
 description: 在 bitmagnet 中重新处理和重新分类种子
-parent: Guides
+parent: 指南
 layout: default
 nav_order: 5
 redirect_from:

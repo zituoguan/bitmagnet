@@ -1,7 +1,7 @@
 ---
 title: 导入
 description: 将种子导入 bitmagnet
-parent: Guides
+parent: 指南
 layout: default
 nav_order: 6
 redirect_from:

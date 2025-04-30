@@ -1,7 +1,7 @@
 ---
 title: 可观测性与遥测
 description: bitmagnet 的可观测性与遥测功能
-parent: Guides
+parent: 指南
 layout: default
 nav_order: 9
 redirect_from:

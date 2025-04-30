@@ -1,7 +1,7 @@
 ---
 title: 安装
 description: bitmagnet 的安装说明
-parent: Setup
+parent: 设置
 layout: default
 nav_order: 1
 ---

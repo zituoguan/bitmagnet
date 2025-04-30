@@ -1,7 +1,7 @@
 ---
 title: 配置
 description: bitmagnet 的配置选项
-parent: 安装与设置
+parent: 设置
 layout: default
 nav_order: 2
 ---

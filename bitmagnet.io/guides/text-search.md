@@ -1,7 +1,7 @@
 ---
 title: 文本搜索
 description: 使用 bitmagnet 的文本搜索
-parent: Guides
+parent: 指南
 layout: default
 nav_order: 2
 redirect_from:

@@ -1,7 +1,7 @@
 ---
 title: Servarr 集成
 description: 将 bitmagnet 与 Servarr 堆栈中的应用程序集成
-parent: Guides
+parent: 指南
 layout: default
 nav_order: 8
 redirect_from:

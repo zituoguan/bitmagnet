@@ -1,7 +1,7 @@
 ---
 title: 分类器
 description: 了解和自定义 bitmagnet 的分类器
-parent: Guides
+parent: 指南
 layout: default
 nav_order: 4
 redirect_from:

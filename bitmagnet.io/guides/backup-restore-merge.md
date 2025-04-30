@@ -1,7 +1,7 @@
 ---
 title: 备份、恢复与合并
 description: 如何备份、恢复、合并和共享 bitmagnet 数据库
-parent: Guides
+parent: 指南
 layout: default
 nav_order: 7
 redirect_from:

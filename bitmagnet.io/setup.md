@@ -1,9 +1,9 @@
 ---
-title: 安装
+title: 设置
 layout: default
 nav_order: 2
 has_children: true
 ---
 
-# 安装
+# 设置
 

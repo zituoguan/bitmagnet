@@ -1,7 +1,7 @@
 ---
 title: 技术栈
 description: bitmagnet 使用的技术栈
-parent: Guides
+parent: 指南
 layout: default
 nav_order: 10
 redirect_from:
